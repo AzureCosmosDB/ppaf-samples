@@ -1,0 +1,19 @@
+﻿# .NET build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio code workspace
+.vscode/
+
+# app settings with secrets
+appsettings.json
+
+# OS files
+.DS_Store
+Thumbs.db
