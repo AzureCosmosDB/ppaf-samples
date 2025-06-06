@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace AzureCosmosDBPPAFDemo
@@ -49,8 +50,13 @@ namespace AzureCosmosDBPPAFDemo
                     },
             };
 
+            // Use DefaultAzureCredential for managed identity authentication if applicable
+            var credential = new DefaultAzureCredential();
+            
+            // Initialise CosmosClient with DefaultCredential
+            CosmosClient client = new CosmosClient(safeEndpoint, credential, clientOptions);
+
             // Initialize Cosmos DB client and container reference
-            CosmosClient client = new CosmosClient(endpoint, key, clientOptions);
             Container container = client.GetContainer(databaseId, containerId);
 
             // Set up cancellation support for graceful shutdown (Ctrl+C)
