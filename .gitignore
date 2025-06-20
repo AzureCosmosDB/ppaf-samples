@@ -1,0 +1,50 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code workspace
+.vscode/
+
+# Rider IDE files
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+# Uncomment if you have a packages folder in your project root
+# !packages/build/
+
+# Dotnet CLI
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Configuration files (keep appsettings.json, ignore secrets)
+appsettings.Development.json
+appsettings.json
+appsettings.*.local.json
+secrets.json
+
+# Logs
+*.log
+
+# Azure Functions local settings
+local.settings.json
+
+# Others
+*.vs/
