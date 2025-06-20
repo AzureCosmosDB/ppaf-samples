@@ -1,11 +1,12 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 
-namespace AzureCosmosDBPPAFDemo
+namespace ppaf_demo_app
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             // Build configuration from appsettings.json (ensure this file exists and is properly configured)
             var config = new ConfigurationBuilder()
@@ -19,6 +20,7 @@ namespace AzureCosmosDBPPAFDemo
             string? key = cosmosConfig["Key"];
             string? databaseId = cosmosConfig["DatabaseId"];
             string? containerId = cosmosConfig["ContainerId"];
+            string? preferredRegions = cosmosConfig["PreferredRegions"];
 
             // Validate that all required Cosmos DB settings are present
             if (string.IsNullOrWhiteSpace(endpoint) ||
@@ -41,17 +43,20 @@ namespace AzureCosmosDBPPAFDemo
             {
                 ApplicationName = "ppaf-demo",
                 ConnectionMode = ConnectionMode.Direct,
-                // Update the ApplicationPreferredRegions list below to match your preferred Azure regions..
-                ApplicationPreferredRegions = new List<string>
-                    {
-                        "West US 2",    // Example region; replace or add regions as needed
-                        "Central US"
-                    },
+                // Use preferred regions from appsettings.json
+                ApplicationPreferredRegions = string.IsNullOrWhiteSpace(preferredRegions)
+                    ? null
+                    : preferredRegions.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             };
 
-            // Initialize Cosmos DB client and container reference
-            CosmosClient client = new CosmosClient(endpoint, key, clientOptions);
-            Container container = client.GetContainer(databaseId, containerId);
+            // Use DefaultAzureCredential for managed identity authentication if applicable
+            var credential = new DefaultAzureCredential();
+            
+            // Initialise CosmosClient with DefaultCredential
+            CosmosClient client = new CosmosClient(safeEndpoint, credential, clientOptions);
+
+            // Get reference to the container
+            var container = client.GetContainer(safeDatabaseId, safeContainerId);
 
             // Set up cancellation support for graceful shutdown (Ctrl+C)
             using var cts = new CancellationTokenSource();
